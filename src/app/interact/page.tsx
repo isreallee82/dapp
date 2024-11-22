@@ -1,12 +1,26 @@
-// pages/interact.tsx
+// app/interact.tsx
 "use client";
 
-import React from "react";
-import { useAppKitAccount } from '@reown/appkit/react'
+import React, { useState } from "react";
+import { useAppKitAccount } from '@reown/appkit/react';
 import Link from "next/link";
+import TransactionForm from "@/components/TransactionForm";  // Import TransactionForm
 
 const Interact: React.FC = () => {
   const { address, isConnected } = useAppKitAccount();
+  const [transactionDetails, setTransactionDetails] = useState<{
+    amount: string;
+    recipient: string;
+    message?: string;
+  } | null>(null);
+
+  const handleTransactionSubmit = (transactionData: {
+    amount: string;
+    recipient: string;
+    message?: string;
+  }) => {
+    setTransactionDetails(transactionData);
+  };
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center p-6">
@@ -16,27 +30,17 @@ const Interact: React.FC = () => {
         Wallet Address: {isConnected ? address : "No wallet connected"}
       </p>
 
-      {/* Form Component */}
-      <form className="flex flex-col items-center">
-        <input
-          type="text"
-          placeholder="Enter Transaction Amount"
-          className="p-2 mb-2 border rounded"
-        />
-        <input
-          type="text"
-          placeholder="Enter Recipient Address"
-          className="p-2 mb-2 border rounded"
-        />
-        <input
-          type="text"
-          placeholder="Enter a Message (optional)"
-          className="p-2 mb-4 border rounded"
-        />
-        <button type="submit" onClick={() => console.log("submited")} className="px-4 py-2 text-white bg-blue-500 rounded">
-          Submit Transaction
-        </button>
-      </form>
+      {/* TransactionForm component to handle form submission */}
+      <TransactionForm onSubmit={handleTransactionSubmit} />
+
+      {transactionDetails && (
+        <div className="mt-4">
+          <h2 className="text-xl font-semibold">Transaction Details:</h2>
+          <p>Amount: {transactionDetails.amount} ETH</p>
+          <p>Recipient: {transactionDetails.recipient}</p>
+          <p>Message: {transactionDetails.message || "No message"}</p>
+        </div>
+      )}
 
       <Link className="bg-gray-500 text-white p-2 rounded mt-4" href="/">
         Back to Home

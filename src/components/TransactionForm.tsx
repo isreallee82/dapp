@@ -38,31 +38,34 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col mt-4">
+    <form onSubmit={handleSubmit} className="flex flex-col mt-6 max-w-lg mx-auto p-4 bg-white shadow-lg rounded-lg">
+      <h2 className="text-2xl font-semibold mb-4 text-center">Submit Transaction</h2>
+
       <input
         type="text"
-        placeholder="Enter Transaction Amount"
+        placeholder="Enter Transaction Amount (ETH)"
         value={amount}
         onChange={handleInputChange(setAmount)}
-        className="p-2 mb-2 border rounded"
+        className="p-3 mb-4 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
       <input
         type="text"
         placeholder="Enter Recipient Address"
         value={recipient}
         onChange={handleInputChange(setRecipient)}
-        className="p-2 mb-2 border rounded"
+        className="p-3 mb-4 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
       <input
         type="text"
         placeholder="Enter a Message (optional)"
         value={message}
         onChange={handleInputChange(setMessage)}
-        className="p-2 mb-4 border rounded"
+        className="p-3 mb-6 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
+
       <button
         type="submit"
-        className="px-4 py-2 text-white bg-blue-500 rounded"
+        className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
       >
         Submit Transaction
       </button>
