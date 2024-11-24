@@ -2,7 +2,7 @@
 
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { isAddress } from "ethers"; // For address validation
-import { useAppKitAccount } from "@reown/appkit/react";
+import { useAppKitAccount, useAppKitNetwork } from "@reown/appkit/react";
 import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
 
 interface TransactionData {
@@ -28,6 +28,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, provider })
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [transactionResult, setTransactionResult] = useState<SendTransactionResult | null>(null);
 
+  const { caipNetwork  } = useAppKitNetwork()
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -51,10 +53,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, provider })
 
     try {
       setIsLoading(true);
+      if (!caipNetwork) {
+        alert("Network is not defined. Please connect to a network.");
+        return;
+      }
+
       const gas = await provider.estimateGas({
         address: recipient,
         to: recipient,
-        caipNetwork: provider.networks[0],
+        caipNetwork: caipNetwork, // Use the connected network
         data: message ? `0x${Buffer.from(message, "utf8").toString("hex")}` : "",
       });
       setGasPrice(gas.gas);
